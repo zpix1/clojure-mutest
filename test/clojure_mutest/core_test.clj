@@ -1,7 +1,11 @@
 (ns clojure-mutest.core-test
-  (:require [clojure.test :refer :all]
-            [clojure-mutest.core :refer :all]))
+  (:require [clojure-mutest.core :refer :all]
+            [clojure-mutest.utils :refer [load-program-text]]
+            [clojure.test :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
-    (is (= 0 1))))
+    (println "Program text:")
+    (println (load-program-text "lab2.clj"))
+    (println "Program sexpr:")
+    (test0 (load-program-text "lab2.clj"))))

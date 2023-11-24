@@ -1,6 +1,9 @@
-(ns clojure-mutest.core)
+(ns clojure-mutest.core
+  (:require [rewrite-clj.zip :as z]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn test0
+  [text]
+  (let [
+        zloc (z/of-string text)
+        sexpr (z/sexpr zloc)
+  ] (prn sexpr)))
