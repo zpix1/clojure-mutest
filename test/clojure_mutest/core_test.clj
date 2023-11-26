@@ -8,4 +8,4 @@
     (println "Program text:")
     (println (load-program-text "lab2.clj"))
     (println "Program sexpr:")
-    (test0 (load-program-text "lab2.clj"))))
+    (println (test0 (load-program-text "lab2.clj")))))
