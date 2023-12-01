@@ -8,8 +8,7 @@
            (= (:exit proc) 0))))
 
 (defn -main []
-  (let [run-tests (leingen-test-runner "./resources/testp")
-        _ (prn run-tests)]
+  (let [run-tests (leingen-test-runner "./resources/testp")]
     (file-mutest "./resources/testp/src/testp/core.clj"
                  run-tests
                  nil)))
