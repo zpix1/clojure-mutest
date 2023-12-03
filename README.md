@@ -1,10 +1,12 @@
 # clojure-mutest
 
-A Clojure library designed to ... well, that part is up to you.
+A clojure mutation testing library
 
 ## Usage
 
-FIXME
+Leiningen is required for this library.
+
+`lein run`
 
 ## License
 
