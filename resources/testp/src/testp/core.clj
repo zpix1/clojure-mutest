@@ -1,3 +1,3 @@
 (ns testp.core)
 
-(defn my-then [a b] (or (not a) b))
+(defn my-then [a b] (and (not a) b))

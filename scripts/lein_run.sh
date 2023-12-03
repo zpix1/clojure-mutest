@@ -1,3 +1,3 @@
 #!/bin/sh
 
-(cd $1; lein test)
+(unset CLASSPATH; cd $1; lein test)

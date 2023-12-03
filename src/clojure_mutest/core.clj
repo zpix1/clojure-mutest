@@ -4,7 +4,7 @@
 
 (defn leingen-test-runner [path-to-project]
   (fn [] (let [proc (sh/sh "./scripts/lein_run.sh" path-to-project)]
-           (prn proc)
+           (println (:out proc))
            (= (:exit proc) 0))))
 
 (defn -main []
