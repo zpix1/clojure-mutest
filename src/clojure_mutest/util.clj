@@ -65,10 +65,13 @@
     (log/log-info "All mutants were killed, good job!"))
   (spit path (html/create-html output)))
 
+(defn get-mutants [zloc]
+  (-> zloc
+      (mutants (all-paths zloc))))
+
 (defn file-mutest [filename run-tests config]
   (let [file-form (z/of-file* filename {:track-position? true})
-        paths (all-paths file-form)
-        mutated-forms (mutants file-form paths)
+        mutated-forms (get-mutants file-form)
         original-root-str (z/string file-form)
         _ (log/log-info "Found " (count mutated-forms) "different mutants")
         out (try
