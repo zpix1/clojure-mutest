@@ -1,8 +1,8 @@
-<html><head><title>Clojure Mutest Report</title><link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&amp;family=Roboto:wght@400&amp;display=swap" rel="stylesheet" type="text/css" /><style>body {font-family: 'Roboto', sans-serif; margin: 0; padding: 0;}h1 {font-family: 'Roboto', sans-serif; font-weight: 400; text-align: center; padding: 20px; margin: 0;}table {border-collapse: collapse; margin: auto;}th, td {border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px;}.monospace {font-family: 'Roboto Mono', monospace; white-space: pre;}.center {text-align: center;}.killed {background-color: #dff0d8;}.failed {background-color: #f2dede;}.success {color: green;}#hideKilledLabel {padding: 5px; margin-left: auto; margin-right: auto; display: block; text-align: center;}#hideKilled {padding: 5px;}</style></head><body><h1 class="incomplete">Clojure Mutest Report</h1><label for="hideKilled" id="hideKilledLabel"><input id="hideKilled" type="checkbox" />Hide Killed Tests</label><table><thead><tr><th>File</th><th>Line</th><th>Column</th><th>Killed</th><th>Before</th><th>After</th></tr></thead><tbody><tr class="failed"><td>./resources/testp/src/testp/core.clj</td><td>6</td><td>8</td><td>No</td><td class="monospace">(defn factorial [n]
+<html><head><title>Clojure Mutest Report</title><link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&amp;family=Roboto:wght@400&amp;display=swap" rel="stylesheet" type="text/css" /><style>body {font-family: 'Roboto', sans-serif; margin: 0; padding: 0;}h1 {font-family: 'Roboto', sans-serif; font-weight: 400; text-align: center; padding: 20px; margin: 0;}table {border-collapse: collapse; margin: auto;}th, td {border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px;}.monospace {font-family: 'Roboto Mono', monospace; white-space: pre;}.center {text-align: center;}.killed {background-color: #dff0d8;}.failed {background-color: #f2dede;}.success {color: green;}#hideKilledLabel {padding: 5px; margin-left: auto; margin-right: auto; display: block; text-align: center;}#hideKilled {padding: 5px;}</style></head><body><h1 class="incomplete">Clojure Mutest Report</h1><label for="hideKilled" id="hideKilledLabel"><input id="hideKilled" type="checkbox" />Hide Killed Tests</label><table><thead><tr><th>File</th><th>Line</th><th>Column</th><th>Killed</th><th>Before</th><th>After</th></tr></thead><tbody><tr class="failed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>4</td><td>8</td><td>No</td><td class="monospace">(defn fibonacci [n]
   (if (< n 1)
-    1</td><td class="monospace">(defn factorial [n]
+    n</td><td class="monospace">(defn fibonacci [n]
   (if (<= n 1)
-    1</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>8</td><td>6</td><td>Yes</td><td class="monospace">    1
+    n</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>8</td><td>6</td><td>Yes</td><td class="monospace">    1
     (* n (factorial (dec n)))))</td><td class="monospace">    1
     (+ n (factorial (dec n)))))</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>7</td><td>5</td><td>Yes</td><td class="monospace">  (if (< n 1)
     1
@@ -12,18 +12,18 @@
   (if (< n 1)
     1</td><td class="monospace">(defn factorial [n]
   (if (< n 7)
+    1</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>6</td><td>8</td><td>Yes</td><td class="monospace">(defn factorial [n]
+  (if (< n 1)
+    1</td><td class="monospace">(defn factorial [n]
+  (if (<= n 1)
     1</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>3</td><td>26</td><td>Yes</td><td class="monospace">(defn my-then [a b] (or (not a) b))</td><td class="monospace">(defn my-then [a b] (or (boolean a) b))</td></tr><tr class="killed"><td>./resources/testp/src/testp/core.clj</td><td>3</td><td>22</td><td>Yes</td><td class="monospace">(defn my-then [a b] (or (not a) b))</td><td class="monospace">(defn my-then [a b] (and (not a) b))</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>6</td><td>44</td><td>Yes</td><td class="monospace">    n
     (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))</td><td class="monospace">    n
     (+ (fibonacci (- n 1)) (fibonacci (- n 7)))))</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>6</td><td>24</td><td>Yes</td><td class="monospace">    n
     (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))</td><td class="monospace">    n
     (+ (fibonacci (- n 7)) (fibonacci (- n 2)))))</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>6</td><td>6</td><td>Yes</td><td class="monospace">    n
     (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))</td><td class="monospace">    n
-    (* (fibonacci (- n 1)) (fibonacci (- n 2)))))</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>4</td><td>13</td><td>Yes</td><td class="monospace">(defn fibonacci [n]
-  (if (<= n 1)
-    n</td><td class="monospace">(defn fibonacci [n]
-  (if (<= n 7)
-    n</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>4</td><td>8</td><td>Yes</td><td class="monospace">(defn fibonacci [n]
-  (if (<= n 1)
-    n</td><td class="monospace">(defn fibonacci [n]
+    (* (fibonacci (- n 1)) (fibonacci (- n 2)))))</td></tr><tr class="killed"><td>./resources/testp/src/testp/fibonacci.clj</td><td>4</td><td>12</td><td>Yes</td><td class="monospace">(defn fibonacci [n]
   (if (< n 1)
+    n</td><td class="monospace">(defn fibonacci [n]
+  (if (< n 7)
     n</td></tr></tbody><tr><td colspan="5">Total Tests</td><td class="monospace">11</td></tr><tr><td colspan="5">Total Killed</td><td class="monospace">10</td></tr><tr><td colspan="5">Total Survived</td><td class="monospace">1</td></tr><script>document.addEventListener('DOMContentLoaded', function() {  var hideKilledCheckbox = document.getElementById('hideKilled');  hideKilledCheckbox.addEventListener('change', function() {    var hideKilled = this.checked;    var rows = document.querySelectorAll('.killed');    rows.forEach(function(row) {      row.style.display = hideKilled ? 'none' : '';    });  });});</script></table></body></html>
