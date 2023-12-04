@@ -2,16 +2,29 @@
   (:require [clojure-mutest.mutators :as m]
             [clojure-mutest.html-formatter :as html]
             [rewrite-clj.zip :as z]
-            [clojure-mutest.logger :as log]))
+            [clojure-mutest.logger :as log]
+            [clojure.string :as str]))
 
 (defn- reverse-path [path] (map {z/down z/up, z/right z/left} (reverse path)))
 
-(defn- get-line-str [node] (loop [line-node node
-                                  prev node]
-                             (if (not= (first (z/position line-node))
-                                       (first (z/position node)))
-                               (z/string prev)
-                               (recur (z/up line-node) line-node))))
+(defn- nth-if [coll index] (if
+                            (and (< index (count coll))
+                                 (> index 0)) (nth coll index)
+                            nil))
+
+(defn- extract-lines [lines index]
+  (->> [(nth-if lines (dec index))
+        (nth-if lines index)
+        (nth-if lines (inc index))]
+       (remove nil?)
+       (remove empty?)
+       (str/join "\n")))
+
+(defn- get-line-str [node root-str]
+  (let [pos (z/position node)
+        line-no (- (first pos) 1)
+        lines (str/split-lines root-str)
+        line (extract-lines lines line-no)] line))
 
 (defn- mutants [zipper paths]
   (->> (for [path paths]
@@ -42,14 +55,7 @@
                directions))]
     (cons [] (rec [z/down] (z/down zipper)))))
 
-;; (defn mutate-file [input-filename output-filename]
-;;   (let [form (z/of-file input-filename)
-;;         paths (all-paths form)
-;;         muts (mutants form paths)
-;;         d (z/root-string (first muts))]
-;;     (spit output-filename d)))
-
-(defn use-output [output]
+(defn use-output [path output]
   (print (str "[REPORT ] Clojure Mutest report:\n"
               "[REPORT ] Mutants killed:   " (:killed output) "\n"
               "[REPORT ] Mutants survived: " (- (:total output) (:killed output)) "\n"
@@ -57,31 +63,33 @@
   (if (not= (:total output) (:killed output))
     (log/log-warning "Not all mutants were killed, your tests must be updated, refer HTML report.")
     (log/log-info "All mutants were killed, good job!"))
-  (spit "output.html" (html/create-html output)))
+  (spit path (html/create-html output)))
 
 (defn file-mutest [filename run-tests config]
   (let [file-form (z/of-file* filename {:track-position? true})
         paths (all-paths file-form)
         mutated-forms (mutants file-form paths)
+        original-root-str (z/string file-form)
         _ (log/log-info "Found " (count mutated-forms) "different mutants")
         out (try
               ;; TODO: How to avoid doall?
               (doall
                (for [mutant-data mutated-forms]
-                 (let [mutant-string (z/string (:mutant mutant-data))
-                       _ (log/log-info "Running tests for mutant" (get-line-str (:node-before mutant-data)))
-                       _ (spit filename mutant-string)
+                 (let [mutated-root-str (z/string (:mutant mutant-data))
+                       _ (log/log-info "Running tests for mutant"
+                                       (get-line-str (:node-before mutant-data) mutated-root-str))
+                       _ (spit filename mutated-root-str)
                        result (run-tests)
                        _ (log/log-info "Test result" result)
                        test-data {:killed (not result)
                                   :filename filename
                                   :line (first (:pos mutant-data))
                                   :column (second (:pos mutant-data))
-                                  :before (get-line-str (:node-before mutant-data))
-                                  :after (get-line-str (:node-after mutant-data))}]
+                                  :before (get-line-str (:node-before mutant-data) original-root-str)
+                                  :after (get-line-str (:node-after mutant-data) mutated-root-str)}]
                    test-data)))
               (catch Exception e
                 (log/log-warning "Exception while running test" e))
               (finally (log/log-info "Testing done, reverting ")
-                       (spit filename (z/string file-form))))]
+                       (spit filename original-root-str)))]
     out))

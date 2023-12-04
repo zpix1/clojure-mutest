@@ -10,14 +10,14 @@
            (print "********** Running" script arg "**********"  "\n********** exit code" (:exit proc) "**********\n")
            (= (:exit proc) 0))))
 
-(defn- process-directory [directory run-tests params]
+(defn- process-directory [directory run-tests config]
   (let [files (filter #(.endsWith (.getName %) ".clj")
                       (file-seq (io/file directory)))]
 
     (->> (for [file files]
            (do
              (log/log-info "Working on " (.getPath file))
-             (util/file-mutest (.getPath file) run-tests params)))
+             (util/file-mutest (.getPath file) run-tests config)))
          flatten
          (reduce (fn [acc elem]
                   ;;  (util/use-output acc)
@@ -27,7 +27,7 @@
                           :mutants (cons elem (:mutants acc))))
                  {:total 0
                   :killed 0})
-         util/use-output)))
+         (util/use-output (:output-html config)))))
 
 (defn- run-for-config [config]
   (if (nil? config)

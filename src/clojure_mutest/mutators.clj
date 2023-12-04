@@ -35,43 +35,9 @@
 (defn- swap-zero [node]
   (if (int? (z/sexpr node))
     (if (= 0 (z/sexpr node))
-      (z/replace node 0)
-      (z/replace node 7))
+      [(z/replace node 0)]
+      [(z/replace node 7)])
     nil))
-;; (defn- for->doseq [node]
-;;   (if (= 'for (z/sexpr node))
-;;     [(z/replace node 'doseq)]))
-
-;; (defn- random-keyword [node]
-;;   (let [sexpr (z/sexpr node)]
-;;     (if (keyword? sexpr)
-;;       (case sexpr
-;;         :foo [(z/replace node :bar)]
-;;         [(z/replace node :foo)]))))
-
-;; (defn- rm-args [node]
-;;   (let [sexpr (z/sexpr node)]
-;;     (if (seq? sexpr)
-;;       (let [[defn name args & more] sexpr]
-;;         (if (and (#{'defn 'defn-} defn)
-;;                  (vector? args))
-;;           (for [arg args]
-;;             (-> node z/down z/right z/right
-;;                 (z/edit (partial filterv (complement #{arg})))
-;;                 (z/up))))))))
-
-;; (defn- rm-fn-body [node]
-;;   (let [sexpr (z/sexpr node)]
-;;     (if (seq? sexpr)
-;;       (let [[defn name args & more] sexpr]
-;;         (if (and (#{'defn 'defn-} defn)
-;;                  (vector? args))
-;;           (for [idx (drop 3 (range (count sexpr)))]
-;;             (-> (iterate z/right (z/down node))
-;;                 (nth idx)
-;;                 z/remove
-;;                 z/up
-;;                 z/up)))))))
 
 (def ^:private mutations
   [and-or
@@ -79,13 +45,9 @@
    lt-lte
    true-false
    plus-mul
-  ;;  swap-zero
-  ;;  rm-args
-  ;;  rm-fn-body
+   swap-zero
    eq-noteq
    empty?-seq
-  ;;  for->doseq
-  ;;  random-keyword
    not-boolean])
 
 (defn mutate [zipper]

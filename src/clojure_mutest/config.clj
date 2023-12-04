@@ -1,6 +1,5 @@
 (ns clojure-mutest.config
-  (:require [clojure.edn :as edn]
-            [clojure.java.io :as io]))
+  (:require [clojure.edn :as edn]))
 
 (def config-filename "./clojure-mutest-config.edn")
 
@@ -11,7 +10,9 @@
                      ;; argument for run-tests script
                      :run-tests-arg ""
                      ;; should be a valid path to file
-                     :run-tests "./scripts/lein_run.sh"})
+                     :run-tests "./scripts/lein_run.sh"
+                    ;;  output html path
+                     :output-html "./output.html"})
 
 (defn valid-file-path? [path]
   (and (string? path) (.exists (java.io.File. path))))

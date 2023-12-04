@@ -1,8 +1,9 @@
 {:mutators "all"
- :check-tests-are-valid true
+ :check-tests-are-valid false
  ;; should be valid path to file or to directory
  :path "./resources/testp/src/testp"
  ;; should be a valid path to file
  :run-tests "./scripts/lein_run.sh"
  ;; argument for run-tests script
- :run-tests-arg "./resources/testp"}
+ :run-tests-arg "./resources/testp"
+ :output-html "./output.html"}
