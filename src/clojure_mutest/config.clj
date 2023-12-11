@@ -3,6 +3,7 @@
             [clojure-mutest.logger :as log]))
 
 (def config-filename "./clojure-mutest-config.edn")
+(def ignore-filename "./clojure-mutest-ignore.edn")
 
 (def default-config {:mutators "all"
                      :check-tests-are-valid true
@@ -14,6 +15,8 @@
                      :run-tests "./scripts/lein_run.sh"
                     ;;  output html path
                      :output-html "./output.html"})
+
+(def default-ignore {:ignore []})
 
 (defn valid-file-path? [path]
   (and (string? path) (.exists (java.io.File. path))))
@@ -35,6 +38,13 @@
         (println "Probably you forgot to create configuration file" config-filename "or did not configure it completely")
         false))))
 
+(defn ignore-entry? [entry]
+  (string? (:hash entry)))
+
+(defn check-ignore [ignore]
+  (prn ignore)
+  true)
+
 
 (defn read-config-file [file-path]
   (try
@@ -47,3 +57,8 @@
   (let [config (merge default-config
                       (read-config-file config-filename))]
     (if (check-config config) config nil)))
+
+(defn get-ignore []
+  (let [config (merge default-ignore
+                      (read-config-file ignore-filename))]
+    (if (check-ignore config) config nil)))

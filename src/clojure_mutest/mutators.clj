@@ -44,11 +44,11 @@
   [and-or
    gt-gte
    lt-lte
-  ;;  true-false
-  ;;  plus-mul
-  ;;  swap-zero
-  ;;  eq-noteq
-  ;;  empty?-seq
+   true-false
+   plus-mul
+   swap-zero
+   eq-noteq
+   empty?-seq
    not-boolean])
 
 (defn mutate [zipper]

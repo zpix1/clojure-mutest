@@ -20,10 +20,12 @@
                     ".monospace {font-family: 'Roboto Mono', monospace; white-space: pre;}"
                     ".center {text-align: center;}"
                     ".killed {background-color: #dff0d8;}"
+                    ".skipped {background-color: #f0e168;}"
                     ".failed {background-color: #f2dede;}"
                     ".success {color: green;}"
                     "#hideKilledLabel {padding: 5px; margin-left: auto; margin-right: auto; display: block; text-align: center;}"
-                    "#hideKilled {padding: 5px;}")]]
+                    "#hideKilled {padding: 5px;}"
+                    ".copy-btn {cursor: pointer; padding: 5px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; margin-left: 5px;}")]]
       [:body
        [:h1 {:class (if (= total-survived 0) "success" "incomplete")} "Clojure Mutest Report"]
        [:label {:for "hideKilled" :id "hideKilledLabel"}
@@ -36,38 +38,54 @@
           [:th "Line"]
           [:th "Column"]
           [:th "Killed"]
+          [:th "Skipped"]
           [:th "Before"]
           [:th "After"]
-          [:th "Hash"]]]
+          [:th "Hash"]
+          [:th "Copy"]]]
         [:tbody
          (for [mutant sorted-mutants]
-           [:tr {:class (if (:killed mutant) "killed" "failed")}
+           [:tr {:class (if (:killed mutant) "killed"
+                            (if (:skipped mutant) "skipped" "failed"))}
             [:td (:filename mutant)]
             [:td (:line mutant)]
             [:td (:column mutant)]
             [:td (if (:killed mutant) "Yes" "No")]
+            [:td (if (:skipped mutant) "Yes" "No")]
             [:td {:class "monospace"} (:before mutant)]
             [:td {:class "monospace"} (:after mutant)]
             [:td {:class "monospace"
                   :title (:hash mutant)}
-             (subs (:hash mutant) 0 7)]])]
-        [:tr
-         [:td {:colspan 6} "Total Tests"]
-         [:td {:class "monospace"} total-tests]]
-        [:tr
-         [:td {:colspan 6} "Total Killed"]
-         [:td {:class "monospace"} total-killed]]
-        [:tr
-         [:td {:colspan 6} "Total Survived"]
-         [:td {:class "monospace"} total-survived]]
-        [:script
-         "document.addEventListener('DOMContentLoaded', function() {",
-         "  var hideKilledCheckbox = document.getElementById('hideKilled');",
-         "  hideKilledCheckbox.addEventListener('change', function() {",
-         "    var hideKilled = this.checked;",
-         "    var rows = document.querySelectorAll('.killed');",
-         "    rows.forEach(function(row) {",
-         "      row.style.display = hideKilled ? 'none' : '';",
-         "    });",
-         "  });",
-         "});"]]]])))
+             (subs (:hash mutant) 0 7)]
+            [:td
+             [:button.copy-btn
+              {:onclick (str "copyToClipboard('" {:hash (:hash mutant)} "')")}
+              "Copy"]]])
+         [:tr
+          [:td {:colspan 8} "Total Tests"]
+          [:td {:class "monospace"} total-tests]]
+         [:tr
+          [:td {:colspan 8} "Total Killed"]
+          [:td {:class "monospace"} total-killed]]
+         [:tr
+          [:td {:colspan 8} "Total Survived"]
+          [:td {:class "monospace"} total-survived]]
+         [:script
+          "document.addEventListener('DOMContentLoaded', function() {",
+          "  var hideKilledCheckbox = document.getElementById('hideKilled');",
+          "  hideKilledCheckbox.addEventListener('change', function() {",
+          "    var hideKilled = this.checked;",
+          "    var rows = document.querySelectorAll('.killed, .skipped');",
+          "    rows.forEach(function(row) {",
+          "      row.style.display = hideKilled ? 'none' : '';",
+          "    });",
+          "  });",
+          "});",
+          "  function copyToClipboard(text) {",
+          "    var input = document.createElement('textarea');",
+          "    input.value = text;",
+          "    document.body.appendChild(input);",
+          "    input.select();",
+          "    document.execCommand('copy');",
+          "    document.body.removeChild(input);",
+          "  }"]]]]])))

@@ -24,4 +24,5 @@
 
 (defn string-hash [source-str] (-> source-str
                                    rm-whitespace
-                                   sha1-hash))
+                                   sha1-hash
+                                   (subs 0 7)))

@@ -1,5 +1,5 @@
 (ns clojure-mutest.core
-  (:require [clojure-mutest.config :refer [get-config]]
+  (:require [clojure-mutest.config :refer [get-config get-ignore]]
             [clojure-mutest.logger :as log]
             [clojure-mutest.util :as util]
             [clojure.java.io :as io]
@@ -10,6 +10,22 @@
            (print "********** Running" script arg "**********"  "\n********** exit code" (:exit proc) "**********\n")
            (= (:exit proc) 0))))
 
+(defn count-mutants [mutants]
+  (reduce (fn [acc elem]
+            (assoc acc
+                   :total (+ (:total acc) 1)
+                   :killed (+ (:killed acc) (if (:killed elem) 1 0))
+                   :mutants (cons elem (:mutants acc))))
+          {:total 0
+           :killed 0} mutants))
+
+(defn mark-skipped [mutants] (let [skiplist (map #(:hash %)
+                                                 (:ignore (get-ignore)))
+                                   skipset (set skiplist)]
+                               (for [mutant mutants]
+                                 (assoc mutant :skipped
+                                        (contains? skipset (:hash mutant))))))
+
 (defn- process-directory [directory run-tests config]
   (let [files (filter #(.endsWith (.getName %) ".clj")
                       (file-seq (io/file directory)))]
@@ -19,13 +35,8 @@
              (log/log-info "Working on " (.getPath file))
              (util/file-mutest (.getPath file) run-tests config)))
          flatten
-         (reduce (fn [acc elem]
-                   (assoc acc
-                          :total (+ (:total acc) 1)
-                          :killed (+ (:killed acc) (if (:killed elem) 1 0))
-                          :mutants (cons elem (:mutants acc))))
-                 {:total 0
-                  :killed 0})
+         mark-skipped
+         count-mutants
          (util/use-output (:output-html config)))))
 
 (defn- run-for-config [config]
