@@ -1,9 +1,12 @@
 (ns clojure-mutest.util
-  (:require [clojure-mutest.mutators :as m]
+  (:require [clojure-mutest.hash-node :refer [string-hash]]
             [clojure-mutest.html-formatter :as html]
-            [rewrite-clj.zip :as z]
             [clojure-mutest.logger :as log]
-            [clojure.string :as str]))
+            [clojure-mutest.mutators :as m]
+            [clojure.string :as str]
+            [rewrite-clj.zip :as z]))
+
+
 
 (defn- reverse-path [path] (map {z/down z/up, z/right z/left} (reverse path)))
 
@@ -39,6 +42,7 @@
                                     rev-path)
                            :mutant-node mutant-node}))
                 (map (fn [mutant] {:mutant (:mutant mutant)
+                                   :hash (:mutant-hash mutant)
                                    :node-before node
                                    :node-after (:mutant-node mutant)
                                    :pos node-pos})))))
@@ -86,6 +90,7 @@
                        _ (log/log-info "Test result" result)
                        test-data {:killed (not result)
                                   :filename filename
+                                  :hash (string-hash mutated-root-str)
                                   :line (first (:pos mutant-data))
                                   :column (second (:pos mutant-data))
                                   :before (get-line-str (:node-before mutant-data) original-root-str)

@@ -20,7 +20,6 @@
              (util/file-mutest (.getPath file) run-tests config)))
          flatten
          (reduce (fn [acc elem]
-                  ;;  (util/use-output acc)
                    (assoc acc
                           :total (+ (:total acc) 1)
                           :killed (+ (:killed acc) (if (:killed elem) 1 0))

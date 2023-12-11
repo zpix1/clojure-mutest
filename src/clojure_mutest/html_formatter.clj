@@ -2,9 +2,6 @@
   (:require [hiccup.core :as hiccup]
             [clojure.string :as str]))
 
-;; output
-;; {:mutants [{:killed false, :filename "./resources/testp/src/testp/core.clj", :line 3, :column 26, :before "not", :after "boolean"}]}
-
 (defn create-html [output]
   (let [mutants (:mutants output)
         total-tests (count mutants)
@@ -40,7 +37,8 @@
           [:th "Column"]
           [:th "Killed"]
           [:th "Before"]
-          [:th "After"]]]
+          [:th "After"]
+          [:th "Hash"]]]
         [:tbody
          (for [mutant sorted-mutants]
            [:tr {:class (if (:killed mutant) "killed" "failed")}
@@ -49,15 +47,18 @@
             [:td (:column mutant)]
             [:td (if (:killed mutant) "Yes" "No")]
             [:td {:class "monospace"} (:before mutant)]
-            [:td {:class "monospace"} (:after mutant)]])]
+            [:td {:class "monospace"} (:after mutant)]
+            [:td {:class "monospace"
+                  :title (:hash mutant)}
+             (subs (:hash mutant) 0 7)]])]
         [:tr
-         [:td {:colspan 5} "Total Tests"]
+         [:td {:colspan 6} "Total Tests"]
          [:td {:class "monospace"} total-tests]]
         [:tr
-         [:td {:colspan 5} "Total Killed"]
+         [:td {:colspan 6} "Total Killed"]
          [:td {:class "monospace"} total-killed]]
         [:tr
-         [:td {:colspan 5} "Total Survived"]
+         [:td {:colspan 6} "Total Survived"]
          [:td {:class "monospace"} total-survived]]
         [:script
          "document.addEventListener('DOMContentLoaded', function() {",
