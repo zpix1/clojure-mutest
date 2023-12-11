@@ -18,8 +18,8 @@
 
 (defn rm-whitespace [s]
   (-> (z/of-string* s)
-      (z/postwalk (fn select [zloc] (z/whitespace? zloc))
-                  (fn visit [zloc] (z/remove* zloc)))
+      z/sexpr
+      z/of-node
       z/root-string))
 
 (defn string-hash [source-str] (-> source-str
