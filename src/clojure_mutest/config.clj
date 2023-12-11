@@ -1,5 +1,6 @@
 (ns clojure-mutest.config
-  (:require [clojure.edn :as edn]))
+  (:require [clojure.edn :as edn]
+            [clojure-mutest.logger :as log]))
 
 (def config-filename "./clojure-mutest-config.edn")
 
@@ -31,15 +32,15 @@
         (println "Invalid configuration. The following keys have issues:")
         (doseq [[key value] invalid-keys]
           (println (str "  - " key ": " value)))
-        (println "Probably you forgot to create configuration file" config-filename)
+        (println "Probably you forgot to create configuration file" config-filename "or did not configure it completely")
         false))))
 
 
-(defn- read-config-file [file-path]
+(defn read-config-file [file-path]
   (try
     (edn/read-string (slurp file-path))
     (catch Exception e
-      (prn e)
+      (log/log-warning (.getMessage e))
       nil)))
 
 (defn get-config []

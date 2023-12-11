@@ -34,9 +34,10 @@
 
 (defn- swap-zero [node]
   (if (int? (z/sexpr node))
-    (if (= 0 (z/sexpr node))
-      [(z/replace node 0)]
-      [(z/replace node 7)])
+    (do
+      (if (= 0 (z/sexpr node))
+        [(z/replace node 7)]
+        [(z/replace node 0)]))
     nil))
 
 (def ^:private mutations
