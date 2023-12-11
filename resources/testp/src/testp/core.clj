@@ -1,6 +1,6 @@
 (ns testp.core)
 
-(defn my-then [a b] (or (boolean a) b))
+(defn my-then [a b] (or (not a) b))
 
 (defn factorial [n]
   (if (< n 1)
