@@ -23,12 +23,12 @@ jobs:
       - name: Install Leiningen
         run: |
           mkdir -p ~/.lein
-          curl -o /usr/local/bin/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
-          chmod +x /usr/local/bin/lein
-          lein --version
+          curl -o ~/.lein/lein https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+          chmod +x ~/.lein/lein
+          ~/.lein/lein --version
 
       - name: Test
-        run: lein test
+        run: ~/.lein/lein test
 
       # - name: Deploy artifacts (adjust this based on your project setup)
       #   run: lein uberjar
