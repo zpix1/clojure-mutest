@@ -28,3 +28,13 @@
   (is (= 8 (fibonacci 6)))
   (is (= 13 (fibonacci 7)))
   (is (= 21 (fibonacci 8))))
+
+(deftest test-dummy-if-else
+  (is (= 1 (dummy-if-else 1)))
+  (is (= 2 (dummy-if-else 2)))
+  (is (= 3 (dummy-if-else 3)))
+  (is (= 4 (dummy-if-else 4)))
+  (is (= 5 (dummy-if-else 5)))
+  (is (= 6 (dummy-if-else 6)))
+  (is (= 7 (dummy-if-else 7)))
+  (is (= 8 (dummy-if-else 8))))

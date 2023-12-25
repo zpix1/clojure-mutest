@@ -34,11 +34,19 @@
 
 (defn- swap-zero [node]
   (if (int? (z/sexpr node))
-    (do
     (if (= 0 (z/sexpr node))
       [(z/replace node 7)]
-        [(z/replace node 0)]))
+      [(z/replace node 0)])
     nil))
+
+(defn replace-if-with-then [node]
+  (when (= :list (z/tag node))
+    (let [list-zloc (z/down node)]
+      (when (= 'if (z/sexpr list-zloc))
+        (let [cond-zloc (z/right list-zloc)]
+          (when (boolean? (z/sexpr cond-zloc))
+            (let [then-node (-> cond-zloc z/right z/node)]
+              [(z/replace node then-node)])))))))
 
 (def ^:private mutations
   [and-or
@@ -49,7 +57,8 @@
    swap-zero
    eq-noteq
    empty?-seq
-   not-boolean])
+   not-boolean
+   replace-if-with-then])
 
 (defn mutate [zipper]
   (->> mutations
