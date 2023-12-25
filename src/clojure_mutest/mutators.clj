@@ -43,10 +43,9 @@
   (when (= :list (z/tag node))
     (let [list-zloc (z/down node)]
       (when (= 'if (z/sexpr list-zloc))
-        (let [cond-zloc (z/right list-zloc)]
-          (when (boolean? (z/sexpr cond-zloc))
-            (let [then-node (-> cond-zloc z/right z/node)]
-              [(z/replace node then-node)])))))))
+        (let [cond-zloc (z/right list-zloc)
+              then-node (-> cond-zloc z/right z/node)]
+          [(z/replace node then-node)])))))
 
 (def ^:private mutations
   [and-or

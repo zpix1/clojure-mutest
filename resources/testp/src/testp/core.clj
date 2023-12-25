@@ -9,3 +9,7 @@
 
 (defn dummy-if-else [x] (if false 1 x))
 
+(defn add-or-sum [a b use-sum]
+  (if use-sum
+    (+ a b)
+    (* a b)))

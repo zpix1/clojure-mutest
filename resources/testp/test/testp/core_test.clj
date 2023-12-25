@@ -38,3 +38,13 @@
   (is (= 6 (dummy-if-else 6)))
   (is (= 7 (dummy-if-else 7)))
   (is (= 8 (dummy-if-else 8))))
+
+(deftest test-add-or-sum
+  (is (= 6 (add-or-sum 1 5 true)))
+  (is (= 4 (add-or-sum 2 2 false)))
+  (is (= 7 (add-or-sum 3 4 true)))
+  (is (= 4 (add-or-sum 4 1 false)))
+  (is (= 12 (add-or-sum 5 7 true)))
+  (is (= 48 (add-or-sum 6 8 false)))
+  (is (= 13 (add-or-sum 7 6 true)))
+  (is (= 8 (add-or-sum 8 1 false))))
