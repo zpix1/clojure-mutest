@@ -35,8 +35,8 @@
 (defn- swap-zero [node]
   (if (int? (z/sexpr node))
     (do
-      (if (= 0 (z/sexpr node))
-        [(z/replace node 7)]
+    (if (= 0 (z/sexpr node))
+      [(z/replace node 7)]
         [(z/replace node 0)]))
     nil))
 
