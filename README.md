@@ -21,6 +21,30 @@ Example contents:
  :output-html "./output.html"}
 ```
 
+### Setting mutators to run
+
+Config entry `:mutators` can be set to "all" to run all the mutators.  
+If you want to run only a subset of mutators, set `:mutators` to list of their names.  
+Example:
+```edn
+{:mutators ["and-or", "gt-gte"]
+...
+```
+
+The following mutators are currently available:
+```
+and-or
+gt-gte
+lt-lte
+true-false
+plus-mul
+swap-zero
+eq-noteq
+empty?-seq
+not-boolean
+replace-if-with-then
+```
+
 ## Usage
 
 Leiningen is required for this library.

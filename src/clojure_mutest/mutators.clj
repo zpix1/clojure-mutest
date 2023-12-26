@@ -1,5 +1,7 @@
 (ns clojure-mutest.mutators
-  (:require [rewrite-clj.zip :as z]))
+  (:require [clojure-mutest.logger :as log]
+            [clojure.string :as s]
+            [rewrite-clj.zip :as z]))
 
 (defn- swapping-mutation [from to]
   (fn [node]
@@ -47,20 +49,33 @@
               then-node (-> cond-zloc z/right z/node)]
           [(z/replace node then-node)])))))
 
-(def ^:private mutations
-  [and-or
-   gt-gte
-   lt-lte
-   true-false
-   plus-mul
-   swap-zero
-   eq-noteq
-   empty?-seq
-   not-boolean
-   replace-if-with-then])
 
-(defn mutate [zipper]
-  (->> mutations
+(def ^:private all-mutations {"and-or" and-or
+                              "gt-gte" gt-gte
+                              "lt-lte" lt-lte
+                              "true-false" true-false
+                              "plus-mul" plus-mul
+                              "swap-zero" swap-zero
+                              "eq-noteq" eq-noteq
+                              "empty?-seq" empty?-seq
+                              "not-boolean" not-boolean
+                              "replace-if-with-then" replace-if-with-then})
+
+(defn ^:private mutations-impl [config]
+  (let [mutators-filter (:mutators config)
+        mutators (if (= mutators-filter "all")
+                   (vals all-mutations)
+                   (-> all-mutations
+                       (select-keys mutators-filter)
+                       vals))
+        mutators-str (if (= mutators-filter "all") "all" (s/join ", " mutators-filter))
+        _ (log/log-info "Running " mutators-str " mutators")]
+    mutators))
+
+(def ^:private mutations (memoize mutations-impl))
+
+(defn mutate [zipper config]
+  (->> (mutations config)
        (mapcat (fn [m]
                  (try
                    (m zipper)
