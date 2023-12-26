@@ -61,21 +61,20 @@
                               "not-boolean" not-boolean
                               "replace-if-with-then" replace-if-with-then})
 
-(defn ^:private mutations-impl [config]
-  (let [mutators-filter (:mutators config)
-        mutators (if (= mutators-filter "all")
+(defn ^:private mutations-impl [mutators-to-run]
+  (let [mutators (if (= mutators-to-run "all")
                    (vals all-mutations)
                    (-> all-mutations
-                       (select-keys mutators-filter)
+                       (select-keys mutators-to-run)
                        vals))
-        mutators-str (if (= mutators-filter "all") "all" (s/join ", " mutators-filter))
+        mutators-str (if (= mutators-to-run "all") "all" (s/join ", " mutators-to-run))
         _ (log/log-info "Running " mutators-str " mutators")]
     mutators))
 
 (def ^:private mutations (memoize mutations-impl))
 
-(defn mutate [zipper config]
-  (->> (mutations config)
+(defn mutate [zipper mutators-to-run]
+  (->> (mutations mutators-to-run)
        (mapcat (fn [m]
                  (try
                    (m zipper)

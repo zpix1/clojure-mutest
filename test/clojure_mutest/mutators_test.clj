@@ -12,60 +12,60 @@
 (deftest mutators-test
   (testing "swap tests"
     (is
-     (in? (->> "(and true false)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(and true false)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(or true false)"
           "(and false false)"
           "(and true true)"))
 
     (is
-     (in? (->> "(+ 1 2)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(+ 1 2)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(* 1 2)"))
 
     (is
-     (in? (->> "(= 3 3)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(= 3 3)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(not= 3 3)"))
 
     (is
-     (in? (->> "(empty? [1 2 3])"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(empty? [1 2 3])" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(seq [1 2 3])"))
 
     (is
-     (in? (->> "(> 5 3)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(> 5 3)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(>= 5 3)"))
 
     (is
-     (in? (->> "(<= 7 7)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(<= 7 7)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(< 7 7)")))
 
   (testing "swap-zero test"
     (is
-     (in? (->> "(* 0 2)"
-               (#(z/of-string* % {:track-position? true}))
-               util/get-mutants
-               (map #(:mutant %))
-               (map z/string))
+     (in? (as-> "(* 0 2)" expr
+            (#(z/of-string* % {:track-position? true}) expr)
+            (util/get-mutants expr "all")
+            (map #(:mutant %) expr)
+            (map z/string expr))
           "(* 7 2)"))))

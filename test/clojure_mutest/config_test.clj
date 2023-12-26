@@ -28,7 +28,8 @@
 
   (testing "read-config-file test"
     (is (= (config/read-config-file "./clojure-mutest-config.edn")
-           {:mutators "all"
+           {:mutators ["and-or", "gt-gte", "lt-lte", "true-false", "plus-mul", "swap-zero",
+                       "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then"]
             :check-tests-are-valid false
             :path "./resources/testp/src/testp"
             :run-tests "./scripts/lein_run.sh"

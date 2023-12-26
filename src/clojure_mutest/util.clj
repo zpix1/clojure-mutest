@@ -29,13 +29,13 @@
         lines (str/split-lines root-str)
         line (extract-lines lines line-no)] line))
 
-(defn- mutants [zipper paths config]
+(defn- mutants [zipper paths mutators-to-run]
   (->> (for [path paths]
          (let [node (reduce (fn [node dir] (dir node)) zipper path)
                node-pos (z/position node)
                rev-path (reverse-path path)]
            (->> (remove #(nil? (:mutant-node %))
-                        (for [mutant-node (m/mutate node config)]
+                        (for [mutant-node (m/mutate node mutators-to-run)]
                           {:mutant (reduce
                                     (fn [node dir] (dir node))
                                     mutant-node
@@ -69,13 +69,13 @@
     (log/log-info "All mutants were killed, good job!"))
   (spit path (html/create-html output)))
 
-(defn get-mutants [zloc config]
+(defn get-mutants [zloc mutators-to-run]
   (-> zloc
-      (mutants (all-paths zloc) config)))
+      (mutants (all-paths zloc) mutators-to-run)))
 
 (defn file-mutest [filename run-tests config]
   (let [file-form (z/of-file* filename {:track-position? true})
-        mutated-forms (get-mutants file-form config)
+        mutated-forms (get-mutants file-form (:mutators config))
         original-root-str (z/string file-form)
         _ (log/log-info "Found " (count mutated-forms) "different mutants")
         out (try
