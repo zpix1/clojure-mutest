@@ -3,8 +3,11 @@
             [clojure-mutest.html-formatter :as html]
             [clojure-mutest.logger :as log]
             [clojure-mutest.mutators :as m]
+            [clojure.java.io :refer [make-parents]]
+            [clojure.java.shell :as sh]
             [clojure.string :as str]
-            [rewrite-clj.zip :as z]))
+            [rewrite-clj.zip :as z]
+            [clojure.java.io :as io]))
 
 
 
@@ -59,15 +62,46 @@
                directions))]
     (cons [] (rec [z/down] (z/down zipper)))))
 
-(defn use-output [path output]
+(defn print-results [html-path mutest-results]
   (print (str "[REPORT ] Clojure Mutest report:\n"
-              "[REPORT ] Mutants killed:   " (:killed output) "\n"
-              "[REPORT ] Mutants survived: " (- (:total output) (:killed output)) "\n"
-              "[REPORT ] Total mutants:    " (:total output) "\n"))
-  (if (not= (:total output) (:killed output))
+              "[REPORT ] Mutants killed:   " (:killed mutest-results) "\n"
+              "[REPORT ] Mutants survived: " (- (:total mutest-results) (:killed mutest-results)) "\n"
+              "[REPORT ] Total mutants:    " (:total mutest-results) "\n"))
+  (if (not= (:total mutest-results) (:killed mutest-results))
     (log/log-warning "Not all mutants were killed, your tests must be updated, refer HTML report.")
     (log/log-info "All mutants were killed, good job!"))
-  (spit path (html/create-html output)))
+  (spit html-path (html/create-html mutest-results)))
+
+(defn mkdir [dir]
+  (->> dir
+       str
+       java.io.File.
+       .mkdir))
+
+(defn get-parent-dir [file]
+  (let [io_file (io/file file)]
+    (-> io_file
+        .getParent)))
+
+(defn get-filename [file]
+  (let [io_file (io/file file)]
+    (-> io_file
+        .getName)))
+
+(defn get-git-diff [filename]
+  (let
+   [diff (:out (sh/sh "git" "-C" (get-parent-dir filename) "diff" (get-filename filename)))]
+    diff))
+
+(defn save-git-diff [diffs-dir orig-filename mutated-hash]
+  (mkdir diffs-dir)
+  (let [mutant-diff (get-git-diff orig-filename)
+        diff-filename (-> diffs-dir
+                          (io/file (str mutated-hash ".diff"))
+                          (.getPath))]
+    (log/log-info "Saving git diff of " orig-filename " to " diff-filename)
+    (spit diff-filename mutant-diff)
+    diff-filename))
 
 (defn get-mutants [zloc mutators-to-run]
   (-> zloc
@@ -77,6 +111,7 @@
   (let [file-form (z/of-file* filename {:track-position? true})
         mutated-forms (get-mutants file-form (:mutators config))
         original-root-str (z/string file-form)
+        diffs-dir (:git-diff-output-dir config)
         _ (log/log-info "Found " (count mutated-forms) "different mutants")
         out (try
               ;; TODO: How to avoid doall?
@@ -86,15 +121,18 @@
                        _ (log/log-info "Running tests for mutant"
                                        (get-line-str (:node-before mutant-data) mutated-root-str))
                        _ (spit filename mutated-root-str)
+                       mutated_hash (string-hash mutated-root-str)
                        result (run-tests)
+                       git-diff-path (when result (save-git-diff diffs-dir filename mutated_hash))
                        _ (log/log-info "Test result" result)
                        test-data {:killed (not result)
                                   :filename filename
-                                  :hash (string-hash mutated-root-str)
+                                  :hash mutated_hash
                                   :line (first (:pos mutant-data))
                                   :column (second (:pos mutant-data))
                                   :before (get-line-str (:node-before mutant-data) original-root-str)
-                                  :after (get-line-str (:node-after mutant-data) mutated-root-str)}]
+                                  :after (get-line-str (:node-after mutant-data) mutated-root-str)
+                                  :git-diff-path git-diff-path}]
                    test-data)))
               (catch Exception e
                 (log/log-warning "Exception while running test" e))

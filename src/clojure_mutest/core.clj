@@ -37,7 +37,7 @@
          flatten
          mark-skipped
          count-mutants
-         (util/use-output (:output-html config)))))
+         (util/print-results (:output-html config)))))
 
 (defn- run-for-config [config]
   (if (nil? config)

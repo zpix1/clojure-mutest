@@ -2,8 +2,8 @@
   (:require [hiccup.core :as hiccup]
             [clojure.string :as str]))
 
-(defn create-html [output]
-  (let [mutants (:mutants output)
+(defn create-html [mutest-results]
+  (let [mutants (:mutants mutest-results)
         total-tests (count mutants)
         total-killed (count (filter :killed mutants))
         total-survived (- total-tests total-killed)
@@ -42,7 +42,8 @@
           [:th "Before"]
           [:th "After"]
           [:th "Hash"]
-          [:th "Copy"]]]
+          [:th "Copy"]
+          [:th "Diff"]]]
         [:tbody
          (for [mutant sorted-mutants]
            [:tr {:class (if (:killed mutant) "killed"
@@ -60,7 +61,8 @@
             [:td
              [:button.copy-btn
               {:onclick (str "copyToClipboard('" {:hash (:hash mutant)} "')")}
-              "Copy"]]])
+              "Copy"]]
+            [:td {:class "monospace"} (or (:git-diff-path mutant) "")]])
          [:tr
           [:td {:colspan 8} "Total Tests"]
           [:td {:class "monospace"} total-tests]]

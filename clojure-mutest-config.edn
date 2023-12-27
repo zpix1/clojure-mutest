@@ -7,4 +7,5 @@
  :run-tests "./scripts/lein_run.sh"
  ;; argument for run-tests script
  :run-tests-arg "./resources/testp"
- :output-html "./output.html"}
+ :output-html "./output.html"
+ :git-diff-output-dir "diffs"}
