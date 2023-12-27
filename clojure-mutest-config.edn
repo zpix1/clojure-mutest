@@ -1,5 +1,6 @@
 {:mutators ["and-or", "gt-gte", "lt-lte", "true-false", "plus-mul", "swap-zero",
-            "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then"]
+            "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then",
+            "replace-if-with-else"]
  :check-tests-are-valid false
  ;; should be valid path to file or to directory
  :path "./resources/testp/src/testp"

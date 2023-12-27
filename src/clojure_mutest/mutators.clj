@@ -49,6 +49,14 @@
               then-node (-> cond-zloc z/right z/node)]
           [(z/replace node then-node)])))))
 
+(defn replace-if-with-else [node]
+  (when (= :list (z/tag node))
+    (let [list-zloc (z/down node)]
+      (when (= 'if (z/sexpr list-zloc))
+        (let [cond-zloc (z/right list-zloc)
+              else-node (-> cond-zloc z/right z/right z/node)]
+          [(z/replace node else-node)])))))
+
 
 (def ^:private all-mutations {"and-or" and-or
                               "gt-gte" gt-gte
@@ -59,7 +67,8 @@
                               "eq-noteq" eq-noteq
                               "empty?-seq" empty?-seq
                               "not-boolean" not-boolean
-                              "replace-if-with-then" replace-if-with-then})
+                              "replace-if-with-then" replace-if-with-then
+                              "replace-if-with-else" replace-if-with-else})
 
 (defn ^:private mutations-impl [mutators-to-run]
   (let [mutators (if (= mutators-to-run "all")

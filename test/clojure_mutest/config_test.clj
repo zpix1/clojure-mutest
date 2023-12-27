@@ -29,12 +29,14 @@
   (testing "read-config-file test"
     (is (= (config/read-config-file "./clojure-mutest-config.edn")
            {:mutators ["and-or", "gt-gte", "lt-lte", "true-false", "plus-mul", "swap-zero",
-                       "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then"]
+                       "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then",
+                       "replace-if-with-else"]
             :check-tests-are-valid false
             :path "./resources/testp/src/testp"
             :run-tests "./scripts/lein_run.sh"
             :run-tests-arg "./resources/testp"
-            :output-html "./output.html"}))
+            :output-html "./output.html"
+            :git-diff-output-dir "diffs"}))
     (is (nil? (config/read-config-file "./inclojure-mutest-config.edn")))
     (is (nil? (config/read-config-file "./nonexistent-config.edn"))))
 
