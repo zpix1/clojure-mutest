@@ -13,4 +13,8 @@
   (testing "int of x^2 from 0 to 10.1 is 343"
     (float-is (let [f (lab2/intop #(* %1 %1))]
                 (f 10.1))
-              343.4505)))
+              343.4505))
+  (testing "int of x^2 from 0 to 0 is 0"
+    (float-is (let [f (lab2/intop #(* %1 %1))]
+                (f 0))
+              0)))

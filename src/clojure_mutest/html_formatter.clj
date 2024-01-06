@@ -64,13 +64,13 @@
               "Copy"]]
             [:td {:class "monospace"} (or (:git-diff-path mutant) "")]])
          [:tr
-          [:td {:colspan 8} "Total Tests"]
+          [:td {:colspan 9} "Total Tests"]
           [:td {:class "monospace"} total-tests]]
          [:tr
-          [:td {:colspan 8} "Total Killed"]
+          [:td {:colspan 9} "Total Killed"]
           [:td {:class "monospace"} total-killed]]
          [:tr
-          [:td {:colspan 8} "Total Survived"]
+          [:td {:colspan 9} "Total Survived"]
           [:td {:class "monospace"} total-survived]]
          [:script
           "document.addEventListener('DOMContentLoaded', function() {",

@@ -1,0 +1,13 @@
+diff --git a/resources/testp/src/testp/core.clj b/resources/testp/src/testp/core.clj
+index ebbf4c7..a721ed1 100644
+--- a/resources/testp/src/testp/core.clj
++++ b/resources/testp/src/testp/core.clj
+@@ -7,7 +7,7 @@
+     1
+     (* n (factorial (dec n)))))
+ 
+-(defn dummy-if-else [x] (if false 1 x))
++(defn dummy-if-else [x] (if false 0 x))
+ 
+ (defn add-or-sum [a b use-sum]
+   (if use-sum

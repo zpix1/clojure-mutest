@@ -1,0 +1,13 @@
+diff --git a/resources/testp/src/testp/lab2.clj b/resources/testp/src/testp/lab2.clj
+index 61f6624..d9f434b 100644
+--- a/resources/testp/src/testp/lab2.clj
++++ b/resources/testp/src/testp/lab2.clj
+@@ -10,7 +10,7 @@
+                   subs (map calc
+                             (clj-gvn 0 step)
+                             (clj-gvn step step))
+-                  integ (concat '(0) (reductions + subs))]
++                  integ (concat '(7) (reductions + subs))]
+               (fn [x]
+                 (let [i (quot x step)
+                       ival (nth integ (quot x step))

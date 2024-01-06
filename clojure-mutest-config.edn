@@ -1,9 +1,9 @@
 {:mutators ["and-or", "gt-gte", "lt-lte", "true-false", "plus-mul", "swap-zero",
             "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then",
             "replace-if-with-else"]
- :check-tests-are-valid false
+ :check-tests-are-valid true
  ;; should be valid path to file or to directory
- :path "./resources/testp/src/testp"
+ :path "./resources/testp/src/testp/core.clj"
  ;; should be a valid path to file
  :run-tests "./scripts/lein_run.sh"
  ;; argument for run-tests script
