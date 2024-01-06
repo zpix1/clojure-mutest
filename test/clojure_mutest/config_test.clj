@@ -31,7 +31,7 @@
            {:mutators ["and-or", "gt-gte", "lt-lte", "true-false", "plus-mul", "swap-zero",
                        "eq-noteq", "empty?-seq", "not-boolean", "replace-if-with-then",
                        "replace-if-with-else"]
-            :check-tests-are-valid false
+            :check-tests-are-valid true
             :path "./resources/testp/src/testp"
             :run-tests "./scripts/lein_run.sh"
             :run-tests-arg "./resources/testp"
