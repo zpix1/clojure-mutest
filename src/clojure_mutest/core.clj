@@ -3,7 +3,8 @@
             [clojure-mutest.logger :as log]
             [clojure-mutest.util :as util]
             [clojure.java.io :as io]
-            [clojure.java.shell :as sh]))
+            [clojure.java.shell :as sh])
+  (:gen-class))
 
 (defn- test-runner [script arg]
   (fn [] (let [proc (sh/sh script arg)]

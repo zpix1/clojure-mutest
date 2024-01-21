@@ -27,7 +27,7 @@
                     "#hideKilled {padding: 5px;}"
                     ".copy-btn {cursor: pointer; padding: 5px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; margin-left: 5px;}")]]
       [:body
-       [:h1 {:class (if (= total-survived 0) "success" "incomplete")} "Clojure Mutest Report"]
+       [:h1 {:class (if (= total-survived 0) "success" "incomplete")} (str "Clojure Mutest Report " (format "%.3f%%" (/ total-killed total-tests 0.01)))]
        [:label {:for "hideKilled" :id "hideKilledLabel"}
         [:input {:type "checkbox" :id "hideKilled" :checked false}]
         "Hide Killed Tests"]

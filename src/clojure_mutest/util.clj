@@ -66,7 +66,8 @@
   (print (str "[REPORT ] Clojure Mutest report:\n"
               "[REPORT ] Mutants killed:   " (:killed mutest-results) "\n"
               "[REPORT ] Mutants survived: " (- (:total mutest-results) (:killed mutest-results)) "\n"
-              "[REPORT ] Total mutants:    " (:total mutest-results) "\n"))
+              "[REPORT ] Total mutants:    " (:total mutest-results) "\n"
+              "[REPORT ] Score:            " (format "%.3f%%\n" (/ (:killed mutest-results) (:total mutest-results) 0.01))))
   (if (not= (:total mutest-results) (:killed mutest-results))
     (log/log-warning "Not all mutants were killed, your tests must be updated, refer HTML report.")
     (log/log-info "All mutants were killed, good job!"))
@@ -118,7 +119,7 @@
               (doall
                (for [mutant-data mutated-forms]
                  (let [mutated-root-str (z/string (:mutant mutant-data))
-                       _ (log/log-info "Running tests for mutant"
+                       _ (log/log-info "Running tests for mutant\n"
                                        (get-line-str (:node-before mutant-data) mutated-root-str))
                        _ (spit filename mutated-root-str)
                        mutated_hash (string-hash mutated-root-str)
